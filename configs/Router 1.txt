@@ -1,0 +1,141 @@
+Building configuration...
+
+Current configuration : 2311 bytes
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R1
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+ipv6 unicast-routing
+!
+no ipv6 cef
+!
+!
+!
+username ahmed privilege 15 secret 5 $1$mERr$3HhIgMGBA/9qNmgzccuxv0
+!
+!
+license udi pid CISCO2911/K9 sn FTX1524YBU5-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ssh version 2
+ip domain-name pass
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0.2
+ --More-- 
+20:06:13: %OSPF-5-ADJCHG: Process 1, Nbr 17.0.0.2 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+ description HR Network
+ encapsulation dot1Q 2
+ ip address 192.168.2.1 255.255.255.0
+ ip access-group 102 in
+!
+interface GigabitEthernet0/0.5
+ description Shipment Network
+ encapsulation dot1Q 5
+ ip address 192.168.5.1 255.255.255.0
+!
+interface GigabitEthernet0/0.10
+ description customer Network
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+ ip nat inside
+!
+interface GigabitEthernet0/0.100
+ description Management Network
+ encapsulation dot1Q 100
+ ip address 192.168.100.1 255.255.255.0
+!
+interface GigabitEthernet0/0.200
+ description Native VLAN
+ encapsulation dot1Q 200 native
+ ip address 192.168.200.1 255.255.255.0
+!
+interface GigabitEthernet0/1
+ ip address 15.0.0.1 255.255.255.252
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ ip address 16.0.0.1 255.255.255.252
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ network 15.0.0.0 0.0.0.3 area 0
+ network 16.0.0.0 0.0.0.3 area 0
+ network 192.168.2.0 0.0.0.255 area 0
+ network 192.168.5.0 0.0.0.255 area 0
+ network 192.168.10.0 0.0.0.255 area 0
+ network 192.168.100.0 0.0.0.255 area 0
+ network 192.168.200.0 0.0.0.255 area 0
+!
+ip nat inside source static 192.168.10.11 209.165.201.5 
+ip nat inside source static 192.168.10.11 209.226.60.20 
+ip classless
+ip route 160.1.1.0 255.255.255.0 GigabitEthernet0/2 
+ip route 150.1.1.0 255.255.255.0 GigabitEthernet0/1 
+!
+ip flow-export version 9
+!
+!
+access-list 102 deny icmp host 192.168.2.10 host 150.1.1.7
+access-list 102 permit ip any any
+!
+!
+!
+!
+snmp-server community CISCO_RO RO
+snmp-server community CISCO_RW RW
+!
+logging trap debugging
+logging 192.168.10.11
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+ntp server 192.168.10.11
+!
+end

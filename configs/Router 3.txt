@@ -1,0 +1,106 @@
+Building configuration...
+
+Current configuration : 1523 bytes
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Router
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+license udi pid CISCO2911/K9 sn FTX1524ZAII-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ ip address 16.0.0.2 255.255.255.252
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 17.0.0.1 255.255.255.252
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ no ip address
+ ip nat inside
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2.100
+ description Management Network
+ encapsulation dot1Q 100
+ ip address 172.10.10.1 255.255.255.0
+ ip nat inside
+!
+interface GigabitEthernet0/2.200
+ description Native VLAN
+ encapsulation dot1Q 200 native
+ ip address 172.10.200.1 255.255.255.0
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip nat pool PUBLIC_ACCESS 160.1.1.1 160.1.1.50 netmask 255.255.255.0
+ip nat inside source list 1 pool PUBLIC_ACCESS
+ip classless
+ip route 192.168.2.0 255.255.255.0 16.0.0.1 
+ip route 192.168.5.0 255.255.255.0 16.0.0.1 
+ip route 192.168.10.0 255.255.255.0 16.0.0.1 
+ip route 192.168.0.0 255.255.0.0 16.0.0.1 
+ip route 150.1.1.0 255.255.255.0 GigabitEthernet0/1 
+ip route 209.226.60.0 255.255.255.0 GigabitEthernet0/0 
+ip route 10.0.0.0 255.255.0.0 GigabitEthernet0/1 
+!
+ip flow-export version 9
+!
+!
+access-list 1 permit 172.10.10.0 0.0.0.255
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end

@@ -1,0 +1,129 @@
+Building configuration...
+
+Current configuration : 1923 bytes
+!
+version 15.1
+service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Router
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+license udi pid CISCO2911/K9 sn FTX1524B0SG-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ ip address 15.0.0.2 255.255.255.252
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 17.0.0.2 255.255.255.252
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2.3
+ encapsulation dot1Q 3
+ ip address 10.0.3.1 255.255.255.0
+ ip nat inside
+!
+interface GigabitEthernet0/2.6
+ encapsulation dot1Q 6
+ ip address 10.0.6.1 255.255.255.0
+!
+interface GigabitEthernet0/2.8
+ encapsulation dot1Q 8
+ ip address 10.0.8.1 255.255.255.0
+ ip access-group 110 in
+!
+interface GigabitEthernet0/2.100
+ encapsulation dot1Q 100
+ ip address 10.0.100.1 255.255.255.0
+!
+interface GigabitEthernet0/2.200
+ encapsulation dot1Q 200
+ ip address 10.0.200.1 255.255.255.0
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ network 10.0.8.0 0.0.0.255 area 0
+ network 10.0.3.0 0.0.0.255 area 0
+ network 10.0.6.0 0.0.0.255 area 0
+ network 15.0.0.0 0.0.0.3 area 0
+!
+router rip
+ version 2
+ network 10.0.0.0
+ network 15.0.0.0
+ no auto-summary
+!
+ip nat inside source static 10.0.3.10 150.1.1.7 
+ip classless
+ip route 172.10.10.0 255.255.255.0 17.0.0.1 
+ip route 209.226.60.0 255.255.255.0 15.0.0.1 
+ip route 160.1.1.0 255.255.255.0 17.0.0.1 
+!
+ip flow-export version 9
+!
+!
+access-list 110 deny tcp host 10.0.8.10 host 209.226.60.20 eq ftp
+access-list 110 permit icmp host 10.0.8.10 host 209.226.60.20
+access-list 110 permit ip any any
+!
+!
+!
+!
+snmp-server community public RO
+snmp-server community private RW
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+ntp server 10.0.3.10
+!
+end

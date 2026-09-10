@@ -74,7 +74,7 @@ Additional hardening: SSH v2 + local login on R1, SNMP RO/RW community strings f
 nti-network-project/
 ├── README.md
 ├── topology-diagram.png
-├── project.pkt                  # add your Packet Tracer file here
+├── project.pkt
 └── configs/
     ├── R1-running-config.txt
     ├── Router0-running-config.txt
